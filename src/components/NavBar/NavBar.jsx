@@ -7,30 +7,26 @@ const NavBar = () => {
 
   const { user, setUser } = useContext(UserContext)
 
-  const handleSignOut = ()=>{
+  const handleSignOut = () => {
     removeToken()
     setUser(null)
   }
 
   return (
     <nav>
+      <Link to="/">Huddle</Link>
       <ul>
-
+        <li><Link to="/events">Events</Link></li>
         { user
           ?
           <>
             <li>Hello {user.username}</li>
-            <li><Link to="/">Dashboard</Link></li>
-            <li><Link to="/games">Games</Link></li>
-            <li><Link to="/games/new">New Game</Link></li>
             <li><Link to="/" onClick={handleSignOut}>Sign Out</Link></li>
           </>
           :
           <>
-            {/* signed out users land on the landing page, not the dashboard */}
-            <li><Link to="/">Home</Link></li>
-            <li><Link to='/sign-up'>Sign Up</Link></li>
-            <li><Link to='/sign-in'>Sign In</Link></li>
+            <li><Link to="/sign-up">Sign Up</Link></li>
+            <li><Link to="/sign-in">Sign In</Link></li>
           </>
         }
       </ul>
