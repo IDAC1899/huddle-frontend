@@ -3,10 +3,10 @@ import { Link } from 'react-router';
 const Landing = () => {
   return (
     <main>
-      <h1>Game Reviews</h1>
-      <p>Add the games you play, rate them out of 10 and see what everyone else thinks.</p>
+      <h1>Huddle</h1>
+      <p>Find something to do in Bahrain this week. Post an event, RSVP, and chat with everyone going.</p>
       <p>
-        <Link to='/sign-up'>Sign up</Link> or <Link to='/sign-in'>sign in</Link> to get started.
+        <Link to="/sign-up">Sign up</Link> or <Link to="/sign-in">sign in</Link> to join in.
       </p>
     </main>
   );
