@@ -16,6 +16,7 @@ const NavBar = () => {
     <nav>
       <Link to="/">Huddle</Link>
       <ul>
+        <li><Link to="/events">Events</Link></li>
         { user
           ?
           <>
