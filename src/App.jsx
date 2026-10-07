@@ -7,6 +7,7 @@ import SignUpForm from './components/SignUpForm/SignUpForm';
 import SignInForm from './components/SignInForm/SignInForm';
 import Dashboard from './components/Dashboard/Dashboard';
 import Landing from './components/Landing/Landing';
+import EventList from './components/EventList/EventList';
 
 // Context
 import { UserContext } from './contexts/UserContext';
@@ -19,6 +20,9 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path='/' element={user ? <Dashboard /> : <Landing />} />
+
+        {/* anyone can browse events */}
+        <Route path='/events' element={<EventList />} />
 
         {/* only signed out users can see sign up and sign in */}
         {!user && (
