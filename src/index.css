@@ -1,0 +1,958 @@
+/* ============ colours and fonts ============ */
+
+:root {
+  /* pearl background, like the inside of an oyster shell */
+  --pearl: #eef1f3;
+  --shell: #ffffff;
+  /* deep gulf blue for text */
+  --gulf: #0e2a3b;
+  --tide: #4a6b7c;
+  --line: #d5dce1;
+  /* bahrain flag red */
+  --flag: #ce1126;
+  --flag-dark: #a50e1f;
+
+  --display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  --body: 'Alexandria', 'Segoe UI', sans-serif;
+
+  --radius: 14px;
+}
+
+/* ============ base ============ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--pearl);
+  color: var(--gulf);
+  font-family: var(--body);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  line-height: 1;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+
+/* keyboard users can always see where they are */
+:focus-visible {
+  outline: 3px solid var(--flag);
+  outline-offset: 3px;
+}
+
+.page-title {
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 900;
+  margin-bottom: 40px;
+}
+
+.empty {
+  color: var(--tide);
+  padding: 20px 24px;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+.empty a,
+.text-link {
+  color: var(--flag);
+  font-weight: 500;
+}
+
+.error {
+  color: var(--flag);
+  font-weight: 500;
+}
+
+/* "Loading ..." and "Event not found" */
+.status {
+  font-family: var(--display);
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+/* ============ buttons ============ */
+
+button,
+.btn {
+  display: inline-block;
+  font-family: var(--body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 10px 20px;
+  border: 2px solid var(--gulf);
+  border-radius: 10px;
+  background: var(--gulf);
+  color: var(--shell);
+  cursor: pointer;
+}
+
+button:hover,
+.btn:hover {
+  background: #1d4058;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-red {
+  background: var(--flag);
+  border-color: var(--flag);
+}
+
+.btn-red:hover {
+  background: var(--flag-dark);
+  border-color: var(--flag-dark);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--gulf);
+}
+
+.btn-outline:hover {
+  background: var(--gulf);
+  color: var(--shell);
+}
+
+.btn-danger {
+  background: transparent;
+  border-color: var(--flag);
+  color: var(--flag);
+}
+
+.btn-danger:hover {
+  background: var(--flag);
+  color: var(--shell);
+}
+
+.btn-small {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+/* ============ navbar ============ */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 32px;
+  background: var(--shell);
+}
+
+/* red saw-tooth edge under the navbar, from the flag */
+.navbar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 10px;
+  background:
+    linear-gradient(135deg, var(--flag) 50%, transparent 50%) 0 0 / 20px 10px repeat-x,
+    linear-gradient(225deg, var(--flag) 50%, transparent 50%) 0 0 / 20px 10px repeat-x;
+}
+
+.logo {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  font-weight: 900;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--flag);
+}
+
+.navbar ul {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar ul a:not(.btn) {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.navbar ul a:not(.btn):hover {
+  color: var(--flag);
+}
+
+.nav-user {
+  color: var(--tide);
+}
+
+/* ============ landing ============ */
+
+.landing {
+  max-width: none;
+  background: var(--shell);
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  min-height: calc(100vh - 68px);
+}
+
+.landing-text {
+  align-self: center;
+  padding: 64px 48px 64px max(32px, 8vw);
+}
+
+.landing-text h1 {
+  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  font-weight: 900;
+  line-height: 0.92;
+  max-width: 9ch;
+  margin-bottom: 28px;
+}
+
+.landing-text > p {
+  font-size: 1.25rem;
+  max-width: 30ch;
+  margin-bottom: 36px;
+}
+
+.landing-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.landing-links .btn {
+  padding: 14px 28px;
+  font-size: 1.05rem;
+}
+
+/* the red half of the flag, with 5 white points cut into its edge */
+.landing-flag {
+  background: var(--flag);
+  clip-path: polygon(0 0, 72px 10%, 0 20%, 72px 30%, 0 40%, 72px 50%, 0 60%, 72px 70%, 0 80%, 72px 90%, 0 100%, 100% 100%, 100% 0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 48px 48px 140px;
+  overflow: hidden;
+}
+
+.landing-flag span {
+  font-family: var(--display);
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  color: var(--shell);
+  animation: slide-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* every other area is just an outline */
+.landing-flag span:nth-child(even) {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--shell);
+}
+
+/* each area slides in a little after the one above it */
+.landing-flag span:nth-child(2) { animation-delay: 0.08s; }
+.landing-flag span:nth-child(3) { animation-delay: 0.16s; }
+.landing-flag span:nth-child(4) { animation-delay: 0.24s; }
+.landing-flag span:nth-child(5) { animation-delay: 0.32s; }
+.landing-flag span:nth-child(6) { animation-delay: 0.4s; }
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ============ event tickets ============ */
+
+.ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 28px;
+}
+
+.ticket {
+  display: block;
+  text-decoration: none;
+}
+
+.ticket article {
+  position: relative;
+  display: flex;
+  min-height: 170px;
+  background: var(--shell);
+  border-radius: var(--radius);
+}
+
+/* the two half circles cut out where the stub tears off */
+.ticket article::before,
+.ticket article::after {
+  content: '';
+  position: absolute;
+  left: 88px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--pearl);
+}
+
+.ticket article::before {
+  top: -11px;
+}
+
+.ticket article::after {
+  bottom: -11px;
+}
+
+.ticket-stub {
+  flex: 0 0 99px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--gulf);
+  color: var(--shell);
+  border-radius: var(--radius) 0 0 var(--radius);
+  /* dotted line where the stub tears off */
+  border-right: 3px dotted var(--pearl);
+}
+
+.stub-day {
+  font-family: var(--display);
+  font-size: 3.4rem;
+  font-weight: 900;
+  line-height: 0.9;
+}
+
+.stub-month {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* hovering a ticket turns its stub red */
+.ticket:hover .ticket-stub,
+.ticket:focus-visible .ticket-stub {
+  background: var(--flag);
+}
+
+.ticket-body {
+  flex: 1;
+  padding: 22px 24px 20px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ticket-body h2 {
+  font-size: 1.9rem;
+  margin-bottom: 6px;
+}
+
+.ticket-meta {
+  color: var(--tide);
+  font-size: 0.95rem;
+  margin-bottom: auto;
+}
+
+.ticket-count {
+  font-size: 0.85rem;
+  color: var(--tide);
+  margin-top: 6px;
+}
+
+/* the bar showing how many spots are taken */
+.spots-bar {
+  height: 6px;
+  margin-top: 18px;
+  background: var(--pearl);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.spots-fill {
+  height: 100%;
+  background: var(--gulf);
+  border-radius: 6px;
+}
+
+.spots-fill.full {
+  background: var(--flag);
+}
+
+/* rubber "Full" stamp across the corner */
+.full-stamp {
+  position: absolute;
+  bottom: 14px;
+  right: 18px;
+  transform: rotate(-10deg);
+  background: var(--shell);
+  font-family: var(--display);
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--flag);
+  border: 3px solid var(--flag);
+  border-radius: 6px;
+  padding: 2px 10px;
+  opacity: 0.85;
+}
+
+/* ============ dashboard ============ */
+
+.dashboard-section {
+  margin-bottom: 64px;
+}
+
+.dashboard-section > h2 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--gulf);
+}
+
+/* ============ event page ============ */
+
+.event-hero {
+  display: flex;
+  gap: 36px;
+  align-items: stretch;
+  margin-bottom: 56px;
+}
+
+.hero-stub {
+  flex: 0 0 150px;
+  border-radius: var(--radius);
+  border-right: none;
+}
+
+.hero-stub .stub-day {
+  font-size: 6rem;
+}
+
+.hero-stub .stub-month {
+  font-size: 1.2rem;
+}
+
+.hero-text {
+  align-self: center;
+}
+
+.hero-text h1 {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 0.92;
+  margin-bottom: 16px;
+}
+
+.hero-meta {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.hero-host {
+  color: var(--tide);
+}
+
+.owner-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.event-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  align-items: start;
+}
+
+.event-main h2,
+.event-side h2 {
+  font-size: 1.8rem;
+  margin-bottom: 16px;
+}
+
+.event-description {
+  margin-bottom: 56px;
+}
+
+.event-description p {
+  font-size: 1.1rem;
+  max-width: 65ch;
+  white-space: pre-line;
+}
+
+/* the rsvp box sticks while you scroll the comments */
+.event-side {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rsvp-panel,
+.attendees {
+  background: var(--shell);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.rsvp-panel {
+  border-top: 8px solid var(--gulf);
+}
+
+.rsvp-count {
+  font-size: 1.1rem;
+  color: var(--tide);
+}
+
+.count-number {
+  font-family: var(--display);
+  font-size: 4.5rem;
+  font-weight: 900;
+  line-height: 0.9;
+  color: var(--gulf);
+}
+
+.count-number.full {
+  color: var(--flag);
+}
+
+.rsvp-panel .spots-bar {
+  margin: 14px 0 22px;
+}
+
+/* going and maybe sit side by side like a switch */
+.rsvp-choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 2px solid var(--gulf);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.rsvp-choice button {
+  border: none;
+  border-radius: 0;
+  background: var(--shell);
+  color: var(--gulf);
+  padding: 12px;
+  font-size: 1rem;
+}
+
+.rsvp-choice button:hover {
+  background: var(--pearl);
+}
+
+/* the option you picked is filled in */
+.rsvp-choice button.picked {
+  opacity: 1;
+  cursor: default;
+  color: var(--shell);
+}
+
+.rsvp-choice button.going.picked {
+  background: var(--flag);
+}
+
+.rsvp-choice button.maybe.picked {
+  background: var(--gulf);
+}
+
+.cancel-rsvp {
+  display: block;
+  margin-top: 12px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--tide);
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.cancel-rsvp:hover {
+  background: none;
+  color: var(--flag);
+}
+
+.rsvp-panel .error {
+  margin-top: 14px;
+}
+
+.attendees ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.attendees li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 400;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--gulf);
+  color: var(--shell);
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.attendees h3 {
+  font-size: 1.3rem;
+  margin: 22px 0 12px;
+}
+
+/* maybes get an outlined avatar */
+.maybe-list .avatar {
+  background: transparent;
+  color: var(--gulf);
+  border: 2px dashed var(--gulf);
+}
+
+.attendees .empty {
+  padding: 12px 16px;
+}
+
+/* ============ comments ============ */
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.comments > h2 {
+  margin-bottom: 4px;
+}
+
+.comment {
+  max-width: 80%;
+  align-self: flex-start;
+  background: var(--shell);
+  padding: 14px 18px;
+  border-radius: 4px var(--radius) var(--radius) var(--radius);
+}
+
+/* your own comments sit on the right in blue */
+.comment.mine {
+  align-self: flex-end;
+  background: var(--gulf);
+  color: var(--shell);
+  border-radius: var(--radius) 4px var(--radius) var(--radius);
+}
+
+.comment header {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.comment-author {
+  font-weight: 600;
+}
+
+.comment-time {
+  font-size: 0.8rem;
+  color: var(--tide);
+}
+
+.comment.mine .comment-time {
+  color: #a9bfcc;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+
+.comment-actions a,
+.comment-actions button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.comment-actions a:hover,
+.comment-actions button:hover {
+  background: none;
+  opacity: 1;
+}
+
+/* ============ forms ============ */
+
+/* sign in, sign up and the event form pages */
+main:has(> form) {
+  max-width: 600px;
+}
+
+main > h1 {
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 900;
+  margin-bottom: 20px;
+}
+
+/* the message line above a form, hidden when empty */
+main > h1 + p {
+  color: var(--flag);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+main > h1 + p:empty {
+  display: none;
+}
+
+main > form,
+.comment-form.edit-page {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--shell);
+  padding: 32px;
+  border-radius: var(--radius);
+  border-top: 8px solid var(--flag);
+}
+
+main > form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* the row of buttons at the bottom of sign in and sign up */
+main > form > div:last-child {
+  flex-direction: row;
+  margin: 12px 0 0;
+}
+
+label {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+input,
+select,
+textarea {
+  font-family: var(--body);
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--gulf);
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--pearl);
+  border: 2px solid transparent;
+  border-radius: 10px;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--flag);
+  background: var(--shell);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* event form: space out each field, buttons side by side at the end */
+main > form > input,
+main > form > select,
+main > form > textarea {
+  margin-bottom: 12px;
+}
+
+main > form > button {
+  margin-top: 8px;
+}
+
+/* the main button on each form is red, cancel is just an outline */
+main > form > button[type='submit'],
+main > form > div:last-child button:first-child {
+  background: var(--flag);
+  border-color: var(--flag);
+}
+
+main > form > button[type='submit']:hover,
+main > form > div:last-child button:first-child:hover {
+  background: var(--flag-dark);
+  border-color: var(--flag-dark);
+}
+
+main > form > button[type='button'],
+main > form > div:last-child button:last-child {
+  background: transparent;
+  color: var(--gulf);
+}
+
+main > form > button[type='button']:hover,
+main > form > div:last-child button:last-child:hover {
+  background: var(--pearl);
+}
+
+/* the comment box under the comments */
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.comment-form textarea {
+  min-height: 90px;
+  background: var(--shell);
+}
+
+.comment-form button {
+  align-self: flex-end;
+}
+
+/* editing a comment is its own page, so give it some room */
+.comment-form.edit-page {
+  max-width: 600px;
+  margin: 48px auto;
+}
+
+.comment-form.edit-page textarea {
+  background: var(--pearl);
+}
+
+.comment-form.edit-page h1 {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+/* ============ phones and small screens ============ */
+
+@media (max-width: 860px) {
+  .navbar {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+
+  .navbar ul {
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .nav-user {
+    display: none;
+  }
+
+  main {
+    padding: 36px 16px 72px;
+  }
+
+  .landing {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-text {
+    padding: 48px 16px;
+  }
+
+  /* on phones the flag sits underneath with the points along the top */
+  .landing-flag {
+    clip-path: polygon(0 0, 10% 40px, 20% 0, 30% 40px, 40% 0, 50% 40px, 60% 0, 70% 40px, 80% 0, 90% 40px, 100% 0, 100% 100%, 0 100%);
+    padding: 88px 16px 48px;
+  }
+
+  .ticket-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-hero {
+    gap: 18px;
+  }
+
+  .hero-stub {
+    flex-basis: 96px;
+  }
+
+  .hero-stub .stub-day {
+    font-size: 3.6rem;
+  }
+
+  .event-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .event-side {
+    position: static;
+    order: -1;
+  }
+
+  main > form,
+  .comment-form.edit-page {
+    padding: 24px 18px;
+  }
+}
+
+/* turn off the landing animation for people who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .landing-flag span {
+    animation: none;
+  }
+}
