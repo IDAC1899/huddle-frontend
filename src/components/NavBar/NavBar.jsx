@@ -13,21 +13,21 @@ const NavBar = () => {
   }
 
   return (
-    <nav>
-      <Link to="/">Huddle</Link>
+    <nav className="navbar">
+      <Link to="/" className="logo">Huddle</Link>
       <ul>
         <li><Link to="/events">Events</Link></li>
         { user
           ?
           <>
-            <li><Link to="/events/new">New Event</Link></li>
-            <li>Hello {user.username}</li>
+            <li className="nav-user">Hello {user.username}</li>
             <li><Link to="/" onClick={handleSignOut}>Sign Out</Link></li>
+            <li><Link to="/events/new" className="btn btn-red">New Event</Link></li>
           </>
           :
           <>
-            <li><Link to="/sign-up">Sign Up</Link></li>
             <li><Link to="/sign-in">Sign In</Link></li>
+            <li><Link to="/sign-up" className="btn btn-red">Sign Up</Link></li>
           </>
         }
       </ul>
