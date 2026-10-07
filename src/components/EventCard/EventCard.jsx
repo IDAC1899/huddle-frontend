@@ -20,19 +20,30 @@ const EventCard = ({ event }) => {
   return (
     <Link to={`/events/${event.id}`} className="ticket">
       <article>
-        <div className="ticket-stub">
-          <span className="stub-day">{day}</span>
-          <span className="stub-month">{month}</span>
-        </div>
-
-        <div className="ticket-body">
-          <h2>{event.title}</h2>
-          <p className="ticket-meta">{`${event.area}, ${weekday} ${time}`}</p>
-
-          <div className="spots-bar">
-            <div className={isFull ? 'spots-fill full' : 'spots-fill'} style={{ width: `${percentFull}%` }}></div>
+        {event.image ? (
+          <img src={event.image} alt="" className="ticket-photo" />
+        ) : (
+          // no photo, so show the area on the flag instead
+          <div className="ticket-photo no-photo">
+            <span>{event.area}</span>
           </div>
-          <p className="ticket-count">{`${goingCount} of ${event.capacity} going`}</p>
+        )}
+
+        <div className="ticket-main">
+          <div className="ticket-stub">
+            <span className="stub-day">{day}</span>
+            <span className="stub-month">{month}</span>
+          </div>
+
+          <div className="ticket-body">
+            <h2>{event.title}</h2>
+            <p className="ticket-meta">{`${event.area}, ${weekday} ${time}`}</p>
+
+            <div className="spots-bar">
+              <div className={isFull ? 'spots-fill full' : 'spots-fill'} style={{ width: `${percentFull}%` }}></div>
+            </div>
+            <p className="ticket-count">{`${goingCount} of ${event.capacity} going`}</p>
+          </div>
         </div>
 
         {isFull && <span className="full-stamp">Full</span>}
