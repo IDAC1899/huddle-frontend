@@ -7,10 +7,13 @@ import { UserContext } from '../../contexts/UserContext';
 // Services
 import * as eventService from '../../services/eventService';
 import * as rsvpService from '../../services/rsvpService';
+import * as commentService from '../../services/commentService';
 
 // Components
 import RsvpButton from '../RsvpButton/RsvpButton';
 import AttendeeList from '../AttendeeList/AttendeeList';
+import CommentForm from '../CommentForm/CommentForm';
+import CommentList from '../CommentList/CommentList';
 
 const EventDetails = () => {
   const { eventId } = useParams();
@@ -69,6 +72,19 @@ const EventDetails = () => {
     setEvent({ ...event, rsvps: event.rsvps.filter((rsvp) => rsvp.id !== rsvpId) });
   };
 
+  const handleAddComment = async (formData) => {
+    const newComment = await commentService.create(eventId, formData);
+    setEvent({ ...event, comments: [...event.comments, newComment] });
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    await commentService.delete(commentId);
+    setEvent({
+      ...event,
+      comments: event.comments.filter((comment) => comment.id !== commentId),
+    });
+  };
+
   if (!event) return <main>Loading ...</main>;
 
   // the api sends back { detail: "Event not found" } for a bad id
@@ -123,6 +139,23 @@ const EventDetails = () => {
       </section>
 
       <AttendeeList rsvps={event.rsvps} />
+
+      <section>
+        <h2>Comments</h2>
+        {user ? (
+          <CommentForm handleAddComment={handleAddComment} />
+        ) : (
+          <p>
+            <Link to='/sign-in'>Sign in</Link> to comment.
+          </p>
+        )}
+        <CommentList
+          comments={event.comments}
+          eventId={eventId}
+          currentUserId={currentUserId}
+          handleDeleteComment={handleDeleteComment}
+        />
+      </section>
     </main>
   );
 };
