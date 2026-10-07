@@ -8,12 +8,14 @@ import { UserContext } from '../../contexts/UserContext';
 import * as eventService from '../../services/eventService';
 import * as rsvpService from '../../services/rsvpService';
 import * as commentService from '../../services/commentService';
+import * as likeService from '../../services/likeService';
 
 // Components
 import RsvpButton from '../RsvpButton/RsvpButton';
 import AttendeeList from '../AttendeeList/AttendeeList';
 import CommentForm from '../CommentForm/CommentForm';
 import CommentList from '../CommentList/CommentList';
+import SignUpPrompt from '../SignUpPrompt/SignUpPrompt';
 
 const EventDetails = () => {
   const { eventId } = useParams();
@@ -21,6 +23,8 @@ const EventDetails = () => {
   const { user } = useContext(UserContext);
   const [event, setEvent] = useState(null);
   const [message, setMessage] = useState('');
+  // the popup asking guests to sign up
+  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
 
   // the token stores the user's id as a string in "sub", guests have no user
   const currentUserId = user ? Number(user.sub) : null;
@@ -85,10 +89,42 @@ const EventDetails = () => {
     });
   };
 
+  const handleLike = async (commentId) => {
+    // guests get asked to sign up instead
+    if (!user) {
+      setShowSignUpPrompt(true);
+      return;
+    }
+
+    try {
+      const newLike = await likeService.create(commentId);
+      // add the like to the comment it belongs to
+      setEvent({
+        ...event,
+        comments: event.comments.map((comment) =>
+          comment.id === commentId ? { ...comment, likes: [...comment.likes, newLike] } : comment
+        ),
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleUnlike = async (commentId, likeId) => {
+    await likeService.delete(likeId);
+    // take the like off the comment it belongs to
+    setEvent({
+      ...event,
+      comments: event.comments.map((comment) =>
+        comment.id === commentId ? { ...comment, likes: comment.likes.filter((like) => like.id !== likeId) } : comment
+      ),
+    });
+  };
+
   if (!event) return <main className="status">Loading ...</main>;
 
-  // the api sends back { detail: "Event not found" } for a bad id
-  if (event.detail) return <main className="status">{event.detail}</main>;
+  // a bad id (like a guest going to /events/new) sends back a detail instead of an event
+  if (event.detail) return <main className="status">Event not found</main>;
 
   // only "going" rsvps take up a spot
   const goingCount = event.rsvps.filter((rsvp) => rsvp.status === 'going').length;
@@ -111,6 +147,8 @@ const EventDetails = () => {
 
   return (
     <main className="event-page">
+      {event.image && <img src={event.image} alt="" className="event-banner" />}
+
       <header className="event-hero">
         <div className="ticket-stub hero-stub">
           <span className="stub-day">{day}</span>
@@ -132,7 +170,7 @@ const EventDetails = () => {
       <div className="event-layout">
         <div className="event-main">
           <section className="event-description">
-            <h2>About this event</h2>
+            <h2>About This Event</h2>
             <p>{event.description}</p>
           </section>
 
@@ -143,13 +181,15 @@ const EventDetails = () => {
               eventId={eventId}
               currentUserId={currentUserId}
               handleDeleteComment={handleDeleteComment}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
             />
             {user ? (
               <CommentForm handleAddComment={handleAddComment} />
             ) : (
-              <p className="empty">
-                <Link to='/sign-in'>Sign in</Link> to comment.
-              </p>
+              <button className="btn btn-outline write-comment" onClick={() => setShowSignUpPrompt(true)}>
+                Write a Comment
+              </button>
             )}
           </section>
         </div>
@@ -170,9 +210,9 @@ const EventDetails = () => {
                 handleCancelRsvp={handleCancelRsvp}
               />
             ) : (
-              <p>
-                <Link to='/sign-in'>Sign in</Link> to RSVP.
-              </p>
+              <button className="btn btn-red rsvp-guest" onClick={() => setShowSignUpPrompt(true)}>
+                RSVP
+              </button>
             )}
             {message && <p className="error">{message}</p>}
           </section>
@@ -180,6 +220,8 @@ const EventDetails = () => {
           <AttendeeList rsvps={event.rsvps} />
         </aside>
       </div>
+
+      {showSignUpPrompt && <SignUpPrompt handleClose={() => setShowSignUpPrompt(false)} />}
     </main>
   );
 };
