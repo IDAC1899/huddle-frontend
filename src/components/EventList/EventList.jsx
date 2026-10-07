@@ -24,11 +24,13 @@ const EventList = () => {
 
   return (
     <main>
-      <h1>Upcoming events</h1>
-      {!events.length && <p>There are no events yet.</p>}
-      {events.map((event) => (
-        <EventCard key={event.id} event={event} />
-      ))}
+      <h1 className="page-title">Upcoming events</h1>
+      {!events.length && <p className="empty">There are no events yet.</p>}
+      <div className="ticket-grid">
+        {events.map((event) => (
+          <EventCard key={event.id} event={event} />
+        ))}
+      </div>
     </main>
   );
 };
