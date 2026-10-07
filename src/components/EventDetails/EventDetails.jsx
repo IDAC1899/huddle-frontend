@@ -85,77 +85,101 @@ const EventDetails = () => {
     });
   };
 
-  if (!event) return <main>Loading ...</main>;
+  if (!event) return <main className="status">Loading ...</main>;
 
   // the api sends back { detail: "Event not found" } for a bad id
-  if (event.detail) return <main>{event.detail}</main>;
+  if (event.detail) return <main className="status">{event.detail}</main>;
 
   // only "going" rsvps take up a spot
   const goingCount = event.rsvps.filter((rsvp) => rsvp.status === 'going').length;
+  const isFull = goingCount >= event.capacity;
+
+  // how much of the capacity is taken, used for the width of the bar
+  const percentFull = Math.min((goingCount / event.capacity) * 100, 100);
 
   // the signed in user's rsvp, if they have one
   const currentUserRsvp = event.rsvps.find((rsvp) => rsvp.user.id === currentUserId);
 
-  // turn "2026-10-09T19:00:00" into something readable like "Fri 9 Oct, 19:00"
-  const startsAt = new Date(event.starts_at).toLocaleString('en-GB', {
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  // split the date up for the stub, like "9" and "Oct"
+  const startsAt = new Date(event.starts_at);
+  const day = startsAt.getDate();
+  const month = startsAt.toLocaleString('en-GB', { month: 'short' });
+
+  // "Friday 19:00" for the line under the title
+  const weekday = startsAt.toLocaleString('en-GB', { weekday: 'long' });
+  const time = startsAt.toLocaleString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <main>
-      <section>
-        <header>
+    <main className="event-page">
+      <header className="event-hero">
+        <div className="ticket-stub hero-stub">
+          <span className="stub-day">{day}</span>
+          <span className="stub-month">{month}</span>
+        </div>
+        <div className="hero-text">
           <h1>{event.title}</h1>
-          <p>{`Hosted by ${event.user.username}`}</p>
-          <p>{`${event.area} · ${startsAt}`}</p>
+          <p className="hero-meta">{`${event.area}, ${weekday} ${time}`}</p>
+          <p className="hero-host">{`Hosted by ${event.user.username}`}</p>
           {event.user.id === currentUserId && (
-            <>
-              <Link to={`/events/${eventId}/edit`}>Edit</Link>
-              <button onClick={handleDeleteEvent}>Delete</button>
-            </>
+            <div className="owner-actions">
+              <Link to={`/events/${eventId}/edit`} className="btn btn-outline btn-small">Edit</Link>
+              <button onClick={handleDeleteEvent} className="btn btn-danger btn-small">Delete</button>
+            </div>
           )}
-        </header>
-        <p>{event.description}</p>
-      </section>
+        </div>
+      </header>
 
-      <section>
-        <p>{`${goingCount} / ${event.capacity} going`}</p>
-        {user ? (
-          <RsvpButton
-            currentUserRsvp={currentUserRsvp}
-            handleRsvp={handleRsvp}
-            handleCancelRsvp={handleCancelRsvp}
-          />
-        ) : (
-          <p>
-            <Link to='/sign-in'>Sign in</Link> to RSVP.
-          </p>
-        )}
-        {message && <p>{message}</p>}
-      </section>
+      <div className="event-layout">
+        <div className="event-main">
+          <section className="event-description">
+            <h2>About this event</h2>
+            <p>{event.description}</p>
+          </section>
 
-      <AttendeeList rsvps={event.rsvps} />
+          <section className="comments">
+            <h2>Comments</h2>
+            <CommentList
+              comments={event.comments}
+              eventId={eventId}
+              currentUserId={currentUserId}
+              handleDeleteComment={handleDeleteComment}
+            />
+            {user ? (
+              <CommentForm handleAddComment={handleAddComment} />
+            ) : (
+              <p className="empty">
+                <Link to='/sign-in'>Sign in</Link> to comment.
+              </p>
+            )}
+          </section>
+        </div>
 
-      <section>
-        <h2>Comments</h2>
-        {user ? (
-          <CommentForm handleAddComment={handleAddComment} />
-        ) : (
-          <p>
-            <Link to='/sign-in'>Sign in</Link> to comment.
-          </p>
-        )}
-        <CommentList
-          comments={event.comments}
-          eventId={eventId}
-          currentUserId={currentUserId}
-          handleDeleteComment={handleDeleteComment}
-        />
-      </section>
+        <aside className="event-side">
+          <section className="rsvp-panel">
+            <p className="rsvp-count">
+              <span className={isFull ? 'count-number full' : 'count-number'}>{goingCount}</span>
+              {` of ${event.capacity} going`}
+            </p>
+            <div className="spots-bar">
+              <div className={isFull ? 'spots-fill full' : 'spots-fill'} style={{ width: `${percentFull}%` }}></div>
+            </div>
+            {user ? (
+              <RsvpButton
+                currentUserRsvp={currentUserRsvp}
+                handleRsvp={handleRsvp}
+                handleCancelRsvp={handleCancelRsvp}
+              />
+            ) : (
+              <p>
+                <Link to='/sign-in'>Sign in</Link> to RSVP.
+              </p>
+            )}
+            {message && <p className="error">{message}</p>}
+          </section>
+
+          <AttendeeList rsvps={event.rsvps} />
+        </aside>
+      </div>
     </main>
   );
 };
