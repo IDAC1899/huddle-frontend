@@ -10,6 +10,7 @@ import Landing from './components/Landing/Landing';
 import EventList from './components/EventList/EventList';
 import EventDetails from './components/EventDetails/EventDetails';
 import EventForm from './components/EventForm/EventForm';
+import CommentForm from './components/CommentForm/CommentForm';
 
 // Context
 import { UserContext } from './contexts/UserContext';
@@ -30,9 +31,10 @@ const App = () => {
         {
           user ? (
             <>
-              {/* only signed in users can create and edit events */}
+              {/* only signed in users can create and edit */}
               <Route path='/events/new' element={<EventForm />} />
               <Route path='/events/:eventId/edit' element={<EventForm />} />
+              <Route path='/events/:eventId/comments/:commentId/edit' element={<CommentForm />} />
             </>
           ) : (
             <>
