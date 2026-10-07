@@ -9,18 +9,22 @@ const CommentCard = ({ comment, eventId, currentUserId, handleDeleteComment }) =
     minute: '2-digit',
   });
 
+  // your own comments sit on the right, like a chat
+  const isMine = comment.user.id === currentUserId;
+
   return (
-    <article>
+    <article className={isMine ? 'comment mine' : 'comment'}>
       <header>
-        <p>{`${comment.user.username} · ${postedAt}`}</p>
-        {comment.user.id === currentUserId && (
-          <>
-            <Link to={`/events/${eventId}/comments/${comment.id}/edit`}>Edit</Link>
-            <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
-          </>
-        )}
+        <p className="comment-author">{comment.user.username}</p>
+        <p className="comment-time">{postedAt}</p>
       </header>
-      <p>{comment.content}</p>
+      <p className="comment-content">{comment.content}</p>
+      {isMine && (
+        <div className="comment-actions">
+          <Link to={`/events/${eventId}/comments/${comment.id}/edit`}>Edit</Link>
+          <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+        </div>
+      )}
     </article>
   );
 };
