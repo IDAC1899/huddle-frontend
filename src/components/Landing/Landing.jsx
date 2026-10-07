@@ -7,13 +7,13 @@ const Landing = () => {
   return (
     <main className="landing">
       <section className="landing-text">
-        <h1>Something's on in Bahrain this week.</h1>
+        <h1>Something's On in Bahrain This Week.</h1>
         <p>Post an event, RSVP, and chat with everyone going.</p>
         <div className="landing-links">
-          <Link to="/sign-up" className="btn btn-red">Create an account</Link>
-          <Link to="/sign-in" className="btn btn-outline">Sign in</Link>
+          <Link to="/sign-up" className="btn btn-red">Create an Account</Link>
+          <Link to="/sign-in" className="btn btn-outline">Sign In</Link>
         </div>
-        <Link to="/events" className="text-link">Or just browse what's on</Link>
+        <Link to="/events" className="text-link">Browse Events Without an Account</Link>
       </section>
 
       {/* the red side of the flag, listing areas like a poster */}
