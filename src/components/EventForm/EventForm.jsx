@@ -4,6 +4,9 @@ import { useParams, useNavigate } from 'react-router';
 // Services
 import * as eventService from '../../services/eventService';
 
+// Helpers
+import { readImage, MAX_IMAGE_SIZE } from '../../lib/helpers/image-helpers';
+
 // the areas people can pick from
 const AREAS = ['Manama', 'Muharraq', 'Riffa', 'Isa Town', 'Seef', 'Juffair', 'Hamad Town', 'Sitra', 'Budaiya', 'Amwaj'];
 
@@ -17,6 +20,7 @@ const EventForm = () => {
     area: '',
     starts_at: '',
     capacity: '',
+    image: '',
   });
 
   useEffect(() => {
@@ -29,17 +33,39 @@ const EventForm = () => {
         // the date input wants "2026-10-09T19:00", so cut off the seconds
         starts_at: eventData.starts_at.slice(0, 16),
         capacity: eventData.capacity,
+        // events without a photo come back as null
+        image: eventData.image || '',
       });
     };
     // only fetch when editing an existing event
     if (eventId) fetchEvent();
     // reset the form when leaving the edit page
-    return () => setFormData({ title: '', description: '', area: '', starts_at: '', capacity: '' });
+    return () => setFormData({ title: '', description: '', area: '', starts_at: '', capacity: '', image: '' });
   }, [eventId]);
 
   const handleChange = (evt) => {
     setMessage('');
     setFormData({ ...formData, [evt.target.name]: evt.target.value });
+  };
+
+  const handleImageChange = async (evt) => {
+    setMessage('');
+    const file = evt.target.files[0];
+    if (!file) return;
+
+    // keep photos small so the events list stays quick
+    if (file.size > MAX_IMAGE_SIZE) {
+      setMessage('Please choose a photo under 2MB');
+      evt.target.value = '';
+      return;
+    }
+
+    const image = await readImage(file);
+    setFormData({ ...formData, image });
+  };
+
+  const handleRemoveImage = () => {
+    setFormData({ ...formData, image: '' });
   };
 
   const handleSubmit = async (evt) => {
@@ -73,6 +99,21 @@ const EventForm = () => {
       <h1>{eventId ? 'Edit Event' : 'New Event'}</h1>
       <p>{message}</p>
       <form onSubmit={handleSubmit}>
+        <label htmlFor='image-input'>Header photo (optional)</label>
+        {formData.image ? (
+          <div className='image-preview'>
+            <img src={formData.image} alt='Header photo preview' />
+            <button type='button' onClick={handleRemoveImage}>Remove photo</button>
+          </div>
+        ) : (
+          <input
+            type='file'
+            accept='image/*'
+            id='image-input'
+            onChange={handleImageChange}
+          />
+        )}
+
         <label htmlFor='title-input'>Title</label>
         <input
           required
