@@ -4,21 +4,28 @@ const AttendeeList = ({ rsvps }) => {
   const maybeRsvps = rsvps.filter((rsvp) => rsvp.status === 'maybe');
 
   return (
-    <section>
+    <section className="attendees">
       <h2>Who's going</h2>
-      {!goingRsvps.length && <p>No one yet. Be the first!</p>}
+      {!goingRsvps.length && <p className="empty">No one yet. Be the first!</p>}
       <ul>
         {goingRsvps.map((rsvp) => (
-          <li key={rsvp.id}>{rsvp.user.username}</li>
+          <li key={rsvp.id}>
+            {/* first letter of the username as a little avatar */}
+            <span className="avatar">{rsvp.user.username[0]}</span>
+            {rsvp.user.username}
+          </li>
         ))}
       </ul>
 
       {maybeRsvps.length > 0 && (
         <>
           <h3>Maybe</h3>
-          <ul>
+          <ul className="maybe-list">
             {maybeRsvps.map((rsvp) => (
-              <li key={rsvp.id}>{rsvp.user.username}</li>
+              <li key={rsvp.id}>
+                <span className="avatar">{rsvp.user.username[0]}</span>
+                {rsvp.user.username}
+              </li>
             ))}
           </ul>
         </>

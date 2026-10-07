@@ -1,13 +1,27 @@
 import { Link } from 'react-router';
 
+// the areas shown down the red side of the landing page
+const AREAS = ['Manama', 'Muharraq', 'Riffa', 'Seef', 'Juffair', 'Amwaj'];
+
 const Landing = () => {
   return (
-    <main>
-      <h1>Huddle</h1>
-      <p>Find something to do in Bahrain this week. Post an event, RSVP, and chat with everyone going.</p>
-      <p>
-        <Link to="/sign-up">Sign up</Link> or <Link to="/sign-in">sign in</Link> to join in.
-      </p>
+    <main className="landing">
+      <section className="landing-text">
+        <h1>Something's on in Bahrain this week.</h1>
+        <p>Post an event, RSVP, and chat with everyone going.</p>
+        <div className="landing-links">
+          <Link to="/sign-up" className="btn btn-red">Create an account</Link>
+          <Link to="/sign-in" className="btn btn-outline">Sign in</Link>
+        </div>
+        <Link to="/events" className="text-link">Or just browse what's on</Link>
+      </section>
+
+      {/* the red side of the flag, listing areas like a poster */}
+      <section className="landing-flag" aria-hidden="true">
+        {AREAS.map((area) => (
+          <span key={area}>{area}</span>
+        ))}
+      </section>
     </main>
   );
 };

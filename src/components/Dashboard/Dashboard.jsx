@@ -36,30 +36,34 @@ const Dashboard = () => {
 
   return (
     <main>
-      <h1>Welcome, {user.username}</h1>
+      <h1 className="page-title">Welcome, {user.username}</h1>
 
-      <section>
+      <section className="dashboard-section">
         <h2>Hosting</h2>
         {!hosting.length && (
-          <p>
+          <p className="empty">
             You're not hosting anything yet. <Link to="/events/new">Post an event</Link>
           </p>
         )}
-        {hosting.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
+        <div className="ticket-grid">
+          {hosting.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </div>
       </section>
 
-      <section>
+      <section className="dashboard-section">
         <h2>Your RSVPs</h2>
         {!attending.length && (
-          <p>
+          <p className="empty">
             You haven't RSVP'd to anything yet. <Link to="/events">Browse events</Link>
           </p>
         )}
-        {attending.map((event) => (
-          <EventCard key={event.id} event={event} />
-        ))}
+        <div className="ticket-grid">
+          {attending.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </div>
       </section>
     </main>
   );

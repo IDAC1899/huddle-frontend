@@ -34,9 +34,9 @@ const CommentForm = ({ handleAddComment }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={commentId ? 'comment-form edit-page' : 'comment-form'}>
       {commentId && <h1>Edit Comment</h1>}
-      <label htmlFor='content-input'>Your comment:</label>
+      <label htmlFor='content-input'>{commentId ? 'Your comment' : 'Add a comment'}</label>
       <textarea
         required
         name='content'

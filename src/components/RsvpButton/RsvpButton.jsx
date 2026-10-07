@@ -3,15 +3,25 @@ const RsvpButton = ({ currentUserRsvp, handleRsvp, handleCancelRsvp }) => {
   const currentStatus = currentUserRsvp ? currentUserRsvp.status : null;
 
   return (
-    <div>
-      <button onClick={() => handleRsvp('going')} disabled={currentStatus === 'going'}>
-        Going
-      </button>
-      <button onClick={() => handleRsvp('maybe')} disabled={currentStatus === 'maybe'}>
-        Maybe
-      </button>
+    <div className="rsvp-buttons">
+      <div className="rsvp-choice">
+        <button
+          className={currentStatus === 'going' ? 'going picked' : 'going'}
+          onClick={() => handleRsvp('going')}
+          disabled={currentStatus === 'going'}
+        >
+          Going
+        </button>
+        <button
+          className={currentStatus === 'maybe' ? 'maybe picked' : 'maybe'}
+          onClick={() => handleRsvp('maybe')}
+          disabled={currentStatus === 'maybe'}
+        >
+          Maybe
+        </button>
+      </div>
       {currentUserRsvp && (
-        <button onClick={() => handleCancelRsvp(currentUserRsvp.id)}>Cancel RSVP</button>
+        <button className="cancel-rsvp" onClick={() => handleCancelRsvp(currentUserRsvp.id)}>Cancel RSVP</button>
       )}
     </div>
   );
