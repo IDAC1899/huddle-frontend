@@ -24,7 +24,7 @@ const EventList = () => {
 
   return (
     <main>
-      <h1 className="page-title">Upcoming events</h1>
+      <h1 className="page-title">Upcoming Events</h1>
       {!events.length && <p className="empty">There are no events yet.</p>}
       <div className="ticket-grid">
         {events.map((event) => (

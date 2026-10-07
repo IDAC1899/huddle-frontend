@@ -5,7 +5,7 @@ const AttendeeList = ({ rsvps }) => {
 
   return (
     <section className="attendees">
-      <h2>Who's going</h2>
+      <h2>Who's Going</h2>
       {!goingRsvps.length && <p className="empty">No one yet. Be the first!</p>}
       <ul>
         {goingRsvps.map((rsvp) => (

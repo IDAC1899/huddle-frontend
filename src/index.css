@@ -6,6 +6,7 @@
   --shell: #ffffff;
   /* deep gulf blue for text */
   --gulf: #0e2a3b;
+  --gulf-light: #1d4058;
   --tide: #4a6b7c;
   --line: #d5dce1;
   /* bahrain flag red */
@@ -15,10 +16,18 @@
   --display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
   --body: 'Alexandria', 'Segoe UI', sans-serif;
 
-  --radius: 14px;
+  --radius: 0.9rem;
+  --shadow: 0 1.2rem 2.5rem rgba(14, 42, 59, 0.16);
+  --speed: 0.2s;
 }
 
 /* ============ base ============ */
+
+/* everything is sized in rem, so the whole site grows on big screens
+   and projectors and shrinks on phones */
+html {
+  font-size: clamp(15px, 0.5vw + 9px, 24px);
+}
 
 * {
   box-sizing: border-box;
@@ -30,7 +39,6 @@ body {
   color: var(--gulf);
   font-family: var(--body);
   font-weight: 300;
-  font-size: 16px;
   line-height: 1.6;
 }
 
@@ -51,10 +59,15 @@ a {
   color: inherit;
 }
 
+img {
+  display: block;
+  max-width: 100%;
+}
+
 main {
-  max-width: 1120px;
+  width: min(100%, 90rem);
   margin: 0 auto;
-  padding: 48px 24px 96px;
+  padding: 3rem clamp(1rem, 4vw, 4rem) 6rem;
 }
 
 /* keyboard users can always see where they are */
@@ -64,14 +77,14 @@ main {
 }
 
 .page-title {
-  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-size: clamp(3rem, 7vw, 6.5rem);
   font-weight: 900;
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
 }
 
 .empty {
   color: var(--tide);
-  padding: 20px 24px;
+  padding: 1.25rem 1.5rem;
   border: 2px dashed var(--line);
   border-radius: var(--radius);
 }
@@ -80,6 +93,10 @@ main {
 .text-link {
   color: var(--flag);
   font-weight: 500;
+}
+
+.text-link:hover {
+  color: var(--flag-dark);
 }
 
 .error {
@@ -102,23 +119,36 @@ button,
   font-family: var(--body);
   font-size: 0.95rem;
   font-weight: 500;
+  text-align: center;
   text-decoration: none;
-  padding: 10px 20px;
+  padding: 0.65rem 1.3rem;
   border: 2px solid var(--gulf);
-  border-radius: 10px;
+  border-radius: 0.65rem;
   background: var(--gulf);
   color: var(--shell);
   cursor: pointer;
+  transition: transform var(--speed), background var(--speed), color var(--speed), box-shadow var(--speed), border-color var(--speed);
 }
 
+/* buttons lift up when you hover and press down when you click */
 button:hover,
 .btn:hover {
-  background: #1d4058;
+  background: var(--gulf-light);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(14, 42, 59, 0.2);
+}
+
+button:active,
+.btn:active {
+  transform: translateY(0) scale(0.97);
+  box-shadow: none;
 }
 
 button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .btn-red {
@@ -129,6 +159,7 @@ button:disabled {
 .btn-red:hover {
   background: var(--flag-dark);
   border-color: var(--flag-dark);
+  box-shadow: 0 0.5rem 1rem rgba(206, 17, 38, 0.3);
 }
 
 .btn-outline {
@@ -153,7 +184,7 @@ button:disabled {
 }
 
 .btn-small {
-  padding: 6px 14px;
+  padding: 0.4rem 0.9rem;
   font-size: 0.85rem;
 }
 
@@ -166,8 +197,8 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  padding: 14px 32px;
+  gap: 1rem;
+  padding: 0.9rem clamp(1rem, 3vw, 3rem);
   background: var(--shell);
 }
 
@@ -186,29 +217,52 @@ button:disabled {
 
 .logo {
   font-family: var(--display);
-  font-size: 2.2rem;
+  font-size: 2.3rem;
   font-weight: 900;
   line-height: 1;
   text-decoration: none;
   color: var(--flag);
+  transition: transform var(--speed);
+}
+
+.logo:hover {
+  transform: scale(1.06) rotate(-2deg);
 }
 
 .navbar ul {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 1.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+/* nav links get a red line that grows in from the left */
 .navbar ul a:not(.btn) {
+  position: relative;
   text-decoration: none;
   font-weight: 500;
+  transition: color var(--speed);
+}
+
+.navbar ul a:not(.btn)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--flag);
+  transition: width var(--speed);
 }
 
 .navbar ul a:not(.btn):hover {
   color: var(--flag);
+}
+
+.navbar ul a:not(.btn):hover::after {
+  width: 100%;
 }
 
 .nav-user {
@@ -218,59 +272,62 @@ button:disabled {
 /* ============ landing ============ */
 
 .landing {
+  width: 100%;
   max-width: none;
   background: var(--shell);
   padding: 0;
   display: grid;
   grid-template-columns: 1.15fr 1fr;
-  min-height: calc(100vh - 68px);
+  min-height: calc(100vh - 4.5rem);
 }
 
 .landing-text {
   align-self: center;
-  padding: 64px 48px 64px max(32px, 8vw);
+  padding: 4rem 3rem 4rem max(2rem, 8vw);
 }
 
 .landing-text h1 {
-  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  font-size: clamp(3.5rem, 7.5vw, 9rem);
   font-weight: 900;
   line-height: 0.92;
-  max-width: 9ch;
-  margin-bottom: 28px;
+  max-width: 10ch;
+  margin-bottom: 1.75rem;
 }
 
 .landing-text > p {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   max-width: 30ch;
-  margin-bottom: 36px;
+  margin-bottom: 2.25rem;
 }
 
 .landing-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .landing-links .btn {
-  padding: 14px 28px;
+  padding: 0.9rem 1.8rem;
   font-size: 1.05rem;
 }
 
-/* the red half of the flag, with 5 white points cut into its edge */
+/* the red half of the flag. the white band has 5 points cutting into the red,
+   each point is as deep as it is tall, like the real flag */
 .landing-flag {
+  --point: 19vh;
   background: var(--flag);
-  clip-path: polygon(0 0, 72px 10%, 0 20%, 72px 30%, 0 40%, 72px 50%, 0 60%, 72px 70%, 0 80%, 72px 90%, 0 100%, 100% 100%, 100% 0);
+  clip-path: polygon(0 0, var(--point) 10%, 0 20%, var(--point) 30%, 0 40%, var(--point) 50%, 0 60%, var(--point) 70%, 0 80%, var(--point) 90%, 0 100%, 100% 100%, 100% 0);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 48px 48px 48px 140px;
+  padding: 3rem 3rem 3rem calc(var(--point) + 3rem);
   overflow: hidden;
 }
 
 .landing-flag span {
   font-family: var(--display);
-  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-size: clamp(3rem, 6.5vw, 8rem);
   font-weight: 900;
   line-height: 0.95;
   color: var(--shell);
@@ -305,8 +362,8 @@ button:disabled {
 
 .ticket-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr));
+  gap: 1.75rem;
 }
 
 .ticket {
@@ -316,43 +373,103 @@ button:disabled {
 
 .ticket article {
   position: relative;
+  height: 100%;
   display: flex;
-  min-height: 170px;
+  flex-direction: column;
   background: var(--shell);
   border-radius: var(--radius);
+  transition: transform var(--speed), box-shadow var(--speed);
+}
+
+/* tickets lift and grow a little when you hover them */
+.ticket:hover article,
+.ticket:focus-visible article {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--shadow);
+}
+
+.ticket-photo {
+  width: 100%;
+  height: 8rem;
+  object-fit: cover;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* no photo: a little bahrain flag with the area written on it */
+.no-photo {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0.75rem 1.25rem;
+  background: var(--flag);
+  overflow: hidden;
+}
+
+.no-photo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 3.4rem;
+  background: var(--shell);
+  clip-path: polygon(0 0, 45% 0, 100% 10%, 45% 20%, 100% 30%, 45% 40%, 100% 50%, 45% 60%, 100% 70%, 45% 80%, 100% 90%, 45% 100%, 0 100%);
+}
+
+/* every other placeholder is navy so the grid isn't all red */
+.ticket:nth-child(even) .no-photo {
+  background: var(--gulf);
+}
+
+.no-photo span {
+  font-family: var(--display);
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--shell);
+}
+
+.ticket-main {
+  position: relative;
+  flex: 1;
+  display: flex;
 }
 
 /* the two half circles cut out where the stub tears off */
-.ticket article::before,
-.ticket article::after {
+.ticket-main::before,
+.ticket-main::after {
   content: '';
   position: absolute;
-  left: 88px;
+  left: calc(6rem - 11px);
   width: 22px;
   height: 22px;
   border-radius: 50%;
   background: var(--pearl);
 }
 
-.ticket article::before {
+.ticket-main::before {
   top: -11px;
 }
 
-.ticket article::after {
+.ticket-main::after {
   bottom: -11px;
 }
 
 .ticket-stub {
-  flex: 0 0 99px;
+  flex: 0 0 6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 1rem 0;
   background: var(--gulf);
   color: var(--shell);
-  border-radius: var(--radius) 0 0 var(--radius);
+  border-radius: 0 0 0 var(--radius);
   /* dotted line where the stub tears off */
   border-right: 3px dotted var(--pearl);
+  transition: background var(--speed);
 }
 
 .stub-day {
@@ -375,14 +492,14 @@ button:disabled {
 
 .ticket-body {
   flex: 1;
-  padding: 22px 24px 20px 28px;
+  padding: 1.3rem 1.5rem 1.25rem 1.75rem;
   display: flex;
   flex-direction: column;
 }
 
 .ticket-body h2 {
   font-size: 1.9rem;
-  margin-bottom: 6px;
+  margin-bottom: 0.4rem;
 }
 
 .ticket-meta {
@@ -394,13 +511,13 @@ button:disabled {
 .ticket-count {
   font-size: 0.85rem;
   color: var(--tide);
-  margin-top: 6px;
+  margin-top: 0.4rem;
 }
 
 /* the bar showing how many spots are taken */
 .spots-bar {
   height: 6px;
-  margin-top: 18px;
+  margin-top: 1.1rem;
   background: var(--pearl);
   border-radius: 6px;
   overflow: hidden;
@@ -410,6 +527,7 @@ button:disabled {
   height: 100%;
   background: var(--gulf);
   border-radius: 6px;
+  transition: width 0.4s;
 }
 
 .spots-fill.full {
@@ -419,8 +537,8 @@ button:disabled {
 /* rubber "Full" stamp across the corner */
 .full-stamp {
   position: absolute;
-  bottom: 14px;
-  right: 18px;
+  bottom: 0.9rem;
+  right: 1.1rem;
   transform: rotate(-10deg);
   background: var(--shell);
   font-family: var(--display);
@@ -437,27 +555,35 @@ button:disabled {
 /* ============ dashboard ============ */
 
 .dashboard-section {
-  margin-bottom: 64px;
+  margin-bottom: 4rem;
 }
 
 .dashboard-section > h2 {
-  font-size: 2.2rem;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
+  font-size: 2.4rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
   border-bottom: 3px solid var(--gulf);
 }
 
 /* ============ event page ============ */
 
+.event-banner {
+  width: 100%;
+  height: clamp(12rem, 35vh, 28rem);
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 2.5rem;
+}
+
 .event-hero {
   display: flex;
-  gap: 36px;
+  gap: 2.25rem;
   align-items: stretch;
-  margin-bottom: 56px;
+  margin-bottom: 3.5rem;
 }
 
 .hero-stub {
-  flex: 0 0 150px;
+  flex: 0 0 9.5rem;
   border-radius: var(--radius);
   border-right: none;
 }
@@ -475,14 +601,14 @@ button:disabled {
 }
 
 .hero-text h1 {
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(3rem, 7vw, 7rem);
   font-weight: 900;
   line-height: 0.92;
-  margin-bottom: 16px;
+  margin-bottom: 1rem;
 }
 
 .hero-meta {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 500;
 }
 
@@ -492,29 +618,29 @@ button:disabled {
 
 .owner-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 18px;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
 }
 
 .event-layout {
   display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 48px;
+  grid-template-columns: 1fr minmax(18rem, 24rem);
+  gap: 3rem;
   align-items: start;
 }
 
 .event-main h2,
 .event-side h2 {
-  font-size: 1.8rem;
-  margin-bottom: 16px;
+  font-size: 1.9rem;
+  margin-bottom: 1rem;
 }
 
 .event-description {
-  margin-bottom: 56px;
+  margin-bottom: 3.5rem;
 }
 
 .event-description p {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   max-width: 65ch;
   white-space: pre-line;
 }
@@ -522,17 +648,17 @@ button:disabled {
 /* the rsvp box sticks while you scroll the comments */
 .event-side {
   position: sticky;
-  top: 100px;
+  top: 6rem;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.5rem;
 }
 
 .rsvp-panel,
 .attendees {
   background: var(--shell);
   border-radius: var(--radius);
-  padding: 24px;
+  padding: 1.5rem;
 }
 
 .rsvp-panel {
@@ -550,6 +676,7 @@ button:disabled {
   font-weight: 900;
   line-height: 0.9;
   color: var(--gulf);
+  margin-right: 0.3rem;
 }
 
 .count-number.full {
@@ -557,7 +684,13 @@ button:disabled {
 }
 
 .rsvp-panel .spots-bar {
-  margin: 14px 0 22px;
+  margin: 0.9rem 0 1.4rem;
+}
+
+.rsvp-guest {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.05rem;
 }
 
 /* going and maybe sit side by side like a switch */
@@ -565,7 +698,7 @@ button:disabled {
   display: grid;
   grid-template-columns: 1fr 1fr;
   border: 2px solid var(--gulf);
-  border-radius: 10px;
+  border-radius: 0.65rem;
   overflow: hidden;
 }
 
@@ -574,12 +707,14 @@ button:disabled {
   border-radius: 0;
   background: var(--shell);
   color: var(--gulf);
-  padding: 12px;
+  padding: 0.75rem;
   font-size: 1rem;
 }
 
 .rsvp-choice button:hover {
   background: var(--pearl);
+  transform: none;
+  box-shadow: none;
 }
 
 /* the option you picked is filled in */
@@ -599,7 +734,7 @@ button:disabled {
 
 .cancel-rsvp {
   display: block;
-  margin-top: 12px;
+  margin-top: 0.75rem;
   padding: 0;
   border: none;
   background: none;
@@ -611,10 +746,12 @@ button:disabled {
 .cancel-rsvp:hover {
   background: none;
   color: var(--flag);
+  transform: none;
+  box-shadow: none;
 }
 
 .rsvp-panel .error {
-  margin-top: 14px;
+  margin-top: 0.9rem;
 }
 
 .attendees ul {
@@ -623,21 +760,21 @@ button:disabled {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.6rem;
 }
 
 .attendees li {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 0.75rem;
   font-weight: 400;
 }
 
 .avatar {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 2.1rem;
+  height: 2.1rem;
   border-radius: 50%;
   background: var(--gulf);
   color: var(--shell);
@@ -645,11 +782,17 @@ button:disabled {
   font-size: 1.2rem;
   font-weight: 800;
   text-transform: uppercase;
+  transition: transform var(--speed), background var(--speed);
+}
+
+.attendees li:hover .avatar {
+  transform: scale(1.15);
+  background: var(--flag);
 }
 
 .attendees h3 {
-  font-size: 1.3rem;
-  margin: 22px 0 12px;
+  font-size: 1.35rem;
+  margin: 1.4rem 0 0.75rem;
 }
 
 /* maybes get an outlined avatar */
@@ -659,8 +802,12 @@ button:disabled {
   border: 2px dashed var(--gulf);
 }
 
+.maybe-list li:hover .avatar {
+  background: transparent;
+}
+
 .attendees .empty {
-  padding: 12px 16px;
+  padding: 0.75rem 1rem;
 }
 
 /* ============ comments ============ */
@@ -668,18 +815,18 @@ button:disabled {
 .comments {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 0.9rem;
 }
 
 .comments > h2 {
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
 }
 
 .comment {
   max-width: 80%;
   align-self: flex-start;
   background: var(--shell);
-  padding: 14px 18px;
+  padding: 0.9rem 1.1rem;
   border-radius: 4px var(--radius) var(--radius) var(--radius);
 }
 
@@ -693,9 +840,9 @@ button:disabled {
 
 .comment header {
   display: flex;
-  gap: 10px;
+  gap: 0.6rem;
   align-items: baseline;
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
 }
 
 .comment-author {
@@ -711,10 +858,64 @@ button:disabled {
   color: #a9bfcc;
 }
 
+.comment-image {
+  margin-top: 0.75rem;
+  max-height: 18rem;
+  border-radius: 0.6rem;
+}
+
+.comment-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+/* the heart button on other people's comments */
+.like-button {
+  padding: 0.2rem 0.75rem;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--tide);
+  font-size: 0.85rem;
+}
+
+.like-button:hover {
+  background: transparent;
+  border-color: var(--flag);
+  color: var(--flag);
+  transform: scale(1.08);
+  box-shadow: none;
+}
+
+/* once you like a comment the heart goes red with a little pop */
+.like-button.liked {
+  background: var(--flag);
+  border-color: var(--flag);
+  color: var(--shell);
+  animation: pop 0.3s;
+}
+
+.like-button.liked:hover {
+  background: var(--flag-dark);
+  color: var(--shell);
+}
+
+@keyframes pop {
+  50% {
+    transform: scale(1.25);
+  }
+}
+
+.like-count {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
 .comment-actions {
   display: flex;
-  gap: 14px;
-  margin-top: 8px;
+  gap: 0.9rem;
   font-size: 0.85rem;
 }
 
@@ -734,26 +935,33 @@ button:disabled {
 .comment-actions button:hover {
   background: none;
   opacity: 1;
+  transform: none;
+  box-shadow: none;
+}
+
+.write-comment {
+  align-self: flex-start;
+  margin-top: 0.5rem;
 }
 
 /* ============ forms ============ */
 
 /* sign in, sign up and the event form pages */
 main:has(> form) {
-  max-width: 600px;
+  width: min(100%, 40rem);
 }
 
 main > h1 {
-  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-size: clamp(3rem, 7vw, 5rem);
   font-weight: 900;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 
 /* the message line above a form, hidden when empty */
 main > h1 + p {
   color: var(--flag);
   font-weight: 500;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 main > h1 + p:empty {
@@ -764,9 +972,9 @@ main > form,
 .comment-form.edit-page {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
   background: var(--shell);
-  padding: 32px;
+  padding: 2rem;
   border-radius: var(--radius);
   border-top: 8px solid var(--flag);
 }
@@ -774,14 +982,14 @@ main > form,
 main > form > div {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /* the row of buttons at the bottom of sign in and sign up */
 main > form > div:last-child {
   flex-direction: row;
-  margin: 12px 0 0;
+  margin: 0.75rem 0 0;
 }
 
 label {
@@ -797,10 +1005,17 @@ textarea {
   font-weight: 300;
   color: var(--gulf);
   width: 100%;
-  padding: 12px 14px;
+  padding: 0.75rem 0.9rem;
   background: var(--pearl);
   border: 2px solid transparent;
-  border-radius: 10px;
+  border-radius: 0.65rem;
+  transition: border-color var(--speed), background var(--speed);
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: var(--line);
 }
 
 input:focus,
@@ -812,19 +1027,19 @@ textarea:focus {
 }
 
 textarea {
-  min-height: 120px;
+  min-height: 7.5rem;
   resize: vertical;
 }
 
-/* event form: space out each field, buttons side by side at the end */
+/* event form: space out each field */
 main > form > input,
 main > form > select,
 main > form > textarea {
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 main > form > button {
-  margin-top: 8px;
+  margin-top: 0.5rem;
 }
 
 /* the main button on each form is red, cancel is just an outline */
@@ -851,27 +1066,102 @@ main > form > div:last-child button:last-child:hover {
   background: var(--pearl);
 }
 
+/* the photo picker on the event form */
+input[type='file'] {
+  padding: 1.25rem;
+  border: 2px dashed var(--line);
+  background: var(--pearl);
+  cursor: pointer;
+}
+
+input[type='file']:hover {
+  border-color: var(--flag);
+}
+
+/* the chosen photo, with a button to take it off */
+.image-preview {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+  border-radius: 0.65rem;
+}
+
+.image-preview button {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.8rem;
+  background: var(--shell);
+  color: var(--flag);
+  border-color: var(--shell);
+}
+
+.image-preview button:hover {
+  background: var(--flag);
+  color: var(--shell);
+  border-color: var(--flag);
+}
+
+.image-preview.small {
+  margin: 0;
+}
+
+.image-preview.small img {
+  width: 9rem;
+  height: 6rem;
+}
+
 /* the comment box under the comments */
 .comment-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .comment-form textarea {
-  min-height: 90px;
+  min-height: 5.5rem;
   background: var(--shell);
 }
 
-.comment-form button {
-  align-self: flex-end;
+.comment-form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* "Add a photo" looks like a button, the real file input is hidden inside it */
+.photo-picker {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 2px dashed var(--tide);
+  border-radius: 0.65rem;
+  color: var(--tide);
+  cursor: pointer;
+  transition: border-color var(--speed), color var(--speed), transform var(--speed);
+}
+
+.photo-picker:hover {
+  border-color: var(--flag);
+  color: var(--flag);
+  transform: translateY(-2px);
+}
+
+.photo-picker input {
+  display: none;
 }
 
 /* editing a comment is its own page, so give it some room */
 .comment-form.edit-page {
-  max-width: 600px;
-  margin: 48px auto;
+  width: min(92%, 40rem);
+  margin: 3rem auto;
 }
 
 .comment-form.edit-page textarea {
@@ -881,19 +1171,85 @@ main > form > div:last-child button:last-child:hover {
 .comment-form.edit-page h1 {
   font-size: 3rem;
   font-weight: 900;
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
+}
+
+/* ============ sign up popup ============ */
+
+.prompt-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(14, 42, 59, 0.6);
+  animation: fade-in 0.2s;
+}
+
+.prompt {
+  width: min(100%, 30rem);
+  background: var(--shell);
+  border-radius: var(--radius);
+  border-top: 8px solid var(--flag);
+  padding: 2rem;
+  animation: rise 0.25s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.prompt h2 {
+  font-size: 2.6rem;
+  font-weight: 900;
+  margin-bottom: 0.75rem;
+}
+
+.prompt p {
+  margin-bottom: 1.5rem;
+}
+
+.prompt-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.prompt-close {
+  margin-top: 1rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--tide);
+  text-decoration: underline;
+}
+
+.prompt-close:hover {
+  background: none;
+  color: var(--gulf);
+  transform: none;
+  box-shadow: none;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
 }
 
 /* ============ phones and small screens ============ */
 
 @media (max-width: 860px) {
   .navbar {
-    padding: 12px 16px;
     flex-wrap: wrap;
   }
 
   .navbar ul {
-    gap: 14px;
+    gap: 0.9rem;
     flex-wrap: wrap;
   }
 
@@ -901,34 +1257,27 @@ main > form > div:last-child button:last-child:hover {
     display: none;
   }
 
-  main {
-    padding: 36px 16px 72px;
-  }
-
   .landing {
     grid-template-columns: 1fr;
   }
 
   .landing-text {
-    padding: 48px 16px;
+    padding: 3rem 1rem;
   }
 
   /* on phones the flag sits underneath with the points along the top */
   .landing-flag {
-    clip-path: polygon(0 0, 10% 40px, 20% 0, 30% 40px, 40% 0, 50% 40px, 60% 0, 70% 40px, 80% 0, 90% 40px, 100% 0, 100% 100%, 0 100%);
-    padding: 88px 16px 48px;
-  }
-
-  .ticket-grid {
-    grid-template-columns: 1fr;
+    --point: 12vw;
+    clip-path: polygon(0 0, 10% var(--point), 20% 0, 30% var(--point), 40% 0, 50% var(--point), 60% 0, 70% var(--point), 80% 0, 90% var(--point), 100% 0, 100% 100%, 0 100%);
+    padding: calc(var(--point) + 3rem) 1rem 3rem;
   }
 
   .event-hero {
-    gap: 18px;
+    gap: 1.1rem;
   }
 
   .hero-stub {
-    flex-basis: 96px;
+    flex-basis: 6rem;
   }
 
   .hero-stub .stub-day {
@@ -944,15 +1293,22 @@ main > form > div:last-child button:last-child:hover {
     order: -1;
   }
 
+  .comment {
+    max-width: 92%;
+  }
+
   main > form,
   .comment-form.edit-page {
-    padding: 24px 18px;
+    padding: 1.5rem 1.1rem;
   }
 }
 
-/* turn off the landing animation for people who prefer less motion */
+/* turn off the animations for people who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
-  .landing-flag span {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
   }
 }
