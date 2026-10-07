@@ -20,6 +20,7 @@ const NavBar = () => {
         { user
           ?
           <>
+            <li><Link to="/events/new">New Event</Link></li>
             <li>Hello {user.username}</li>
             <li><Link to="/" onClick={handleSignOut}>Sign Out</Link></li>
           </>

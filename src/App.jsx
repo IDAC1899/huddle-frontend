@@ -8,6 +8,8 @@ import SignInForm from './components/SignInForm/SignInForm';
 import Dashboard from './components/Dashboard/Dashboard';
 import Landing from './components/Landing/Landing';
 import EventList from './components/EventList/EventList';
+import EventDetails from './components/EventDetails/EventDetails';
+import EventForm from './components/EventForm/EventForm';
 
 // Context
 import { UserContext } from './contexts/UserContext';
@@ -23,14 +25,22 @@ const App = () => {
 
         {/* anyone can browse events */}
         <Route path='/events' element={<EventList />} />
+        <Route path='/events/:eventId' element={<EventDetails />} />
 
-        {/* only signed out users can see sign up and sign in */}
-        {!user && (
-          <>
-            <Route path='/sign-up' element={<SignUpForm />} />
-            <Route path='/sign-in' element={<SignInForm />} />
-          </>
-        )}
+        {
+          user ? (
+            <>
+              {/* only signed in users can create and edit events */}
+              <Route path='/events/new' element={<EventForm />} />
+              <Route path='/events/:eventId/edit' element={<EventForm />} />
+            </>
+          ) : (
+            <>
+              <Route path='/sign-up' element={<SignUpForm />} />
+              <Route path='/sign-in' element={<SignInForm />} />
+            </>
+          )
+        }
       </Routes>
     </>
   );
